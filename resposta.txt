@@ -1,1 +1,185 @@
 Coloque aqui todas as respostas das práticas indicadas no README.md
+
+
+## **Questão 1. route**
+O utilitário `route` é usado para listar, adicionar e remover regras da tabela de roteamento de um computador. Esta tabela é sempre consultada pela camada de rede do protocolo IP para determinar o próximo salto (*hop*) de um pacote.
+
+### **Prática**
+Utilize o comando `route -n` para verificar a tabela de roteamento e responder:
+
+1. **Qual a sua rede e máscara?**
+255.255.0.0
+2. **Qual o seu roteador padrão (*default gateway*)?**
+0.0.0.0
+3. **Quantas rotas configuradas tem seu computador?**
+2
+
+## **Questão 2. ip (ipconfig/ifconfig)**
+O comando `ip` exibe detalhes de todas as interfaces de rede disponíveis no computador.
+
+### **Prática**
+Utilize o comando `ip a` para verificar as questões abaixo:
+1. **Qual o IP da interface de rede?**
+172.18.0.2
+2. **Qual a rede e a máscara?**
+Rede: 172.18.0.0
+Máscara: 255.255.0.0
+4. **Qual o nome da interface de rede principal?**
+eth0
+
+---
+
+## **Questão 3. nslookup **
+O `nslookup` é usado para traduzir nomes de domínio para seus respectivos endereços IP, consultando servidores DNS.
+
+### **Prática**
+Descubra o endereço IP dos seguintes domínios e informe no arquivo de respostas:
+```sh
+nslookup www.google.com: 172.217.30.36
+nslookup www.whitehouse.gov: 192.0.66.51
+nslookup www.rnp.br: 104.18.27.22 e 104.18.26.22
+nslookup www.ufpb.br: 150.165.254.52
+```
+---
+
+## **Questão 4. ping**
+O utilitário `ping` testa a conectividade entre duas máquinas, enviando pacotes ICMP e aguardando resposta.
+
+### **Prática**
+1. **Teste a conectividade da sua rede local**:
+   - Pingue a interface de loopback: `ping 127.0.0.1`. Qual o tempo de resposta?
+   Pinging 127.0.0.1 with 32 bytes of data:
+Reply from 127.0.0.1: bytes=32 time<1ms TTL=128
+Reply from 127.0.0.1: bytes=32 time<1ms TTL=128
+Reply from 127.0.0.1: bytes=32 time<1ms TTL=128
+Reply from 127.0.0.1: bytes=32 time<1ms TTL=128
+
+   - Pingue seu próprio endereço IP dentro do container. Qual o tempo de resposta?
+
+2. **Teste a conectividade com a Internet**:
+   - `ping www.ufpb.br`
+   root@6a5b6df1cec5:/# ping www.ufpb.br
+PING nginx.bbn.ufpb.br (150.165.254.52): 56 data bytes
+64 bytes from 150.165.254.52: icmp_seq=0 ttl=63 time=26.017 ms
+64 bytes from 150.165.254.52: icmp_seq=1 ttl=63 time=25.100 ms
+64 bytes from 150.165.254.52: icmp_seq=2 ttl=63 time=25.939 ms
+64 bytes from 150.165.254.52: icmp_seq=3 ttl=63 time=27.632 ms
+   - `ping www.yahoo.com`
+   root@6a5b6df1cec5:/# ping www.yahoo.com
+PING me-ycpi-cf-www.g06.yahoodns.net (200.152.173.205): 56 data bytes
+64 bytes from 200.152.173.205: icmp_seq=0 ttl=63 time=171.602 ms
+64 bytes from 200.152.173.205: icmp_seq=1 ttl=63 time=169.661 ms
+64 bytes from 200.152.173.205: icmp_seq=2 ttl=63 time=170.076 ms
+64 bytes from 200.152.173.205: icmp_seq=3 ttl=63 time=170.533 ms
+   - `ping www.brasil.gov.br`
+root@6a5b6df1cec5:/# ping www.brasil.gov.br
+PING www.brasil.gov.br (170.246.255.242): 56 data bytes
+64 bytes from 170.246.255.242: icmp_seq=1 ttl=63 time=77.134 ms
+64 bytes from 170.246.255.242: icmp_seq=2 ttl=63 time=76.626 ms
+64 bytes from 170.246.255.242: icmp_seq=3 ttl=63 time=76.943 ms
+64 bytes from 170.246.255.242: icmp_seq=4 ttl=63 time=77.227 ms
+64 bytes from 170.246.255.242: icmp_seq=5 ttl=63 time=78.448 ms
+   - `ping www.dce.ufpb.br`
+   ping: unknown host
+
+   Quais os tempos de resposta para cada um dos sites. Algum estava inacessível, qual mensagem apareceu?
+   ping www.dce.ufpb.br
+
+
+   3. **Analise os tempos de resposta**:
+   - Compare os tempos de resposta para diferentes sites:
+     - `ping www.google.com`
+     - `ping www.rnp.br`
+     - `ping www.whitehouse.gov`
+   - O que pode influenciar as diferenças nos tempos?
+   Algumas redes são nacionais e outra internacionais, ou seja, as mais distantes oferece um ms maior
+---
+
+
+## **Questão 5. traceroute**
+O `traceroute` mostra por onde um pacote IP trafega até chegar ao destino. Ele ajuda a identificar onde uma comunicação pode estar congestionada ou interrompida.
+
+### **Prática**
+1. Execute `traceroute`nos seguintes domínios:
+   ```sh
+   traceroute www.google.com
+   traceroute www.rnp.br
+   traceroute www.whitehouse.gov
+   ```
+   - Por que alguns roteadores ao longo do caminho não respondem?
+   - Isso significa necessariamente que há um problema na rede?
+   Filtragem de pacotes decidida pelo dono da rede.
+   Não.
+
+---
+
+
+### **Prática**
+1. Liste todas as conexões e portas de escuta:
+   ```sh
+   netstat -tulnp  # Linux
+   ```
+
+   Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 127.0.0.11:41935        0.0.0.0:*               LISTEN      -
+udp        0      0 127.0.0.11:45574        0.0.0.0:*                           -
+
+
+2. Mostre a tabela de roteamento:
+   ```sh
+   netstat -r
+   ```
+   Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+default         172.18.0.1      0.0.0.0         UG        0 0          0 eth0
+172.18.0.0      0.0.0.0         255.255.0.0     U         0 0          0 eth0
+   - Os resultados são os mesmos do comando `route`?
+   Sim
+   - Há informações adicionais?
+   Não, porém alguns nomes mudam.
+
+---
+
+
+## **Questão 7. telnet**
+O `telnet` permite testar a conectividade de um serviço em uma porta específica.
+
+### **Prática**
+1. Teste a conectividade do servidor web na porta 80:
+   ```sh
+   telnet www.ufpb.br 80
+   ```
+   - O servidor respondeu? O serviço está ativo?
+   Sim
+
+2. Teste a conectividade do serviço FTP na porta 21:
+   ```sh
+   telnet www.dce.ufpb.br 21
+   ```
+   - Você conseguiu conexão? Se não, como diferenciar um problema de rede de um problema no serviço?
+   Não, Pela mensagem de erro: Name or service not known, não houve problema nem no ping pra ser relacionado a rede
+
+---
+
+
+
+## **Questão 8. mtr**
+O `mtr` combina as funções do `ping` e `traceroute`, monitorando a rota e latência dos pacotes em tempo real.
+
+### **Prática**
+1. Pesquise sobre o utilitário `mtr`.
+2. **Explique em que situações ele pode ser útil** no gerenciamento de redes.
+Identificação de Perda de Pacotes
+Solução de Problemas de Roteamento
+3. Teste `mtr` com alguns domínios:
+   ```sh
+   mtr www.google.com
+   mtr www.ufpb.br
+   ```
+4. **Pesquisa como interpretar os resultados deste utilitário e explique como esses dados podem ajudar a diagnosticar problemas na rede.**
+O MTR é essencial no gerenciamento de redes, pois combina a simplicidade do ping com a profundidade do traceroute, permitindo monitoramento contínuo e diagnóstico 
+preciso de problemas de conectividade, latência e perda de pacotes. Ele ajuda a otimizar redes, 
+identificando problemas rapidamente e fornecendo informações detalhadas para soluções eficazes.
+---
+

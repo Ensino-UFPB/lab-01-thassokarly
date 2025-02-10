@@ -146,12 +146,14 @@ O `telnet` permite testar a conectividade de um serviço em uma porta específic
    telnet www.ufpb.br 80
    ```
    - O servidor respondeu? O serviço está ativo?
+   Sim.
 
 2. Teste a conectividade do serviço FTP na porta 21:
    ```sh
    telnet www.dce.ufpb.br 21
    ```
    - Você conseguiu conexão? Se não, como diferenciar um problema de rede de um problema no serviço?
+   Não, Pela mensagem de erro,Name or service not known
 
 ---
 
